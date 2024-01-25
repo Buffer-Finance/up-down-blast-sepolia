@@ -38,7 +38,7 @@ ponder.on(
       //     platformFee: BigInt(0),
       //     sfdContract: zeroAddress,
       //     sf: BigInt(0),
-      //     tradeNFTContract: zeroAddress,
+      //     traderNFTContract: zeroAddress,
       //     stepSize: BigInt(0),
       //   },
       // });

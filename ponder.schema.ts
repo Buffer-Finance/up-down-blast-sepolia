@@ -28,7 +28,7 @@ export default createSchema((p) => ({
     platformFee: p.bigint(),
     sfdContract: p.bytes(),
     sf: p.bigint(),
-    tradeNFTContract: p.bytes(),
+    traderNFTContract: p.bytes(),
     stepSize: p.bigint(),
   }),
   QueuedOptionData: p.createTable({

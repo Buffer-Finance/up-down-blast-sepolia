@@ -15,7 +15,7 @@ ponder.on("OptionsConfig:UpdateMinFee", async ({ context, event }) => {
       platformFee: BigInt(0),
       sfdContract: zeroAddress,
       sf: BigInt(0),
-      tradeNFTContract: zeroAddress,
+      traderNFTContract: zeroAddress,
       stepSize: BigInt(0),
     },
     update: ({ current }) => ({
@@ -39,7 +39,7 @@ ponder.on(
         platformFee: BigInt(0),
         sfdContract: zeroAddress,
         sf: BigInt(0),
-        tradeNFTContract: zeroAddress,
+        traderNFTContract: zeroAddress,
         stepSize: BigInt(0),
       },
       update: ({ current }) => ({
@@ -64,7 +64,7 @@ ponder.on(
         platformFee: BigInt(0),
         sfdContract: zeroAddress,
         sf: BigInt(0),
-        tradeNFTContract: zeroAddress,
+        traderNFTContract: zeroAddress,
         stepSize: BigInt(0),
       },
       update: ({ current }) => ({
@@ -89,7 +89,7 @@ ponder.on(
         platformFee: BigInt(0),
         sfdContract: zeroAddress,
         sf: BigInt(0),
-        tradeNFTContract: zeroAddress,
+        traderNFTContract: zeroAddress,
         stepSize: BigInt(0),
       },
       update: ({ current }) => ({
@@ -112,7 +112,7 @@ ponder.on("OptionsConfig:UpdatePlatformFee", async ({ context, event }) => {
       platformFee: args._platformFee,
       sfdContract: zeroAddress,
       sf: BigInt(0),
-      tradeNFTContract: zeroAddress,
+      traderNFTContract: zeroAddress,
       stepSize: BigInt(0),
     },
     update: ({ current }) => ({
@@ -136,7 +136,7 @@ ponder.on(
         platformFee: BigInt(0),
         sfdContract: args.value,
         sf: BigInt(0),
-        tradeNFTContract: zeroAddress,
+        traderNFTContract: zeroAddress,
         stepSize: BigInt(0),
       },
       update: ({ current }) => ({
@@ -159,7 +159,7 @@ ponder.on("OptionsConfig:UpdateSf", async ({ context, event }) => {
       platformFee: BigInt(0),
       sfdContract: zeroAddress,
       sf: args.sf,
-      tradeNFTContract: zeroAddress,
+      traderNFTContract: zeroAddress,
       stepSize: BigInt(0),
     },
     update: ({ current }) => ({
@@ -183,11 +183,11 @@ ponder.on(
         platformFee: BigInt(0),
         sfdContract: zeroAddress,
         sf: BigInt(0),
-        tradeNFTContract: args.value,
+        traderNFTContract: args.value,
         stepSize: BigInt(0),
       },
       update: ({ current }) => ({
-        tradeNFTContract: args.value,
+        traderNFTContract: args.value,
       }),
     });
   }
@@ -206,7 +206,7 @@ ponder.on("OptionsConfig:UpdateStrikeStepSize", async ({ context, event }) => {
       platformFee: BigInt(0),
       sfdContract: zeroAddress,
       sf: BigInt(0),
-      tradeNFTContract: zeroAddress,
+      traderNFTContract: zeroAddress,
       stepSize: args.strikeStepSize,
     },
     update: ({ current }) => ({

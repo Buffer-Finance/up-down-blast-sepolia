@@ -1,9 +1,9 @@
 import { ponder } from "@/generated";
 import { BufferBinaryOptions } from "../abis/BufferBinaryOption";
 import { BufferRouter } from "../abis/BufferRouter";
-import { RouterAddress, State } from "./config";
+import { Period, RouterAddress, State } from "./config";
 import { convertToUSD } from "./convertToUSD";
-import { findPoolAndTokenFromPoolAddress } from "./helpers";
+import { _getDayId, findPoolAndTokenFromPoolAddress } from "./helpers";
 
 ponder.on(
   "BufferBinaryOptions:CreateOptionsContract",
@@ -29,22 +29,6 @@ ponder.on(
     const { pool: poolName, token } = findPoolAndTokenFromPoolAddress(pool);
 
     if (isContractRegisteredToRouter) {
-      // await context.db.ConfigContract.create({
-      //   id: config,
-      //   data: {
-      //     address: event.log.address,
-      //     minFee: BigInt(0),
-      //     creationWindowContract: zeroAddress,
-      //     circuitBreakerContract: zeroAddress,
-      //     optionStorageContract: zeroAddress,
-      //     platformFee: BigInt(0),
-      //     sfdContract: zeroAddress,
-      //     sf: BigInt(0),
-      //     traderNFTContract: zeroAddress,
-      //     stepSize: BigInt(0),
-      //   },
-      // });
-
       await context.db.OptionContract.create({
         id: event.log.address,
         data: {
@@ -95,7 +79,7 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
       const { pool, token } = findPoolAndTokenFromPoolAddress(
         optionContractEntity.poolContract
       );
-      await context.db.UserOptionData.update({
+      const userOptionDataEntity = await context.db.UserOptionData.update({
         id: id + optionContractAddress,
         data: ({ current }) => ({
           state: State.active,
@@ -110,6 +94,43 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
           amount: optionData[5],
           depositToken: token,
         }),
+      });
+
+      await context.db.VolumePerContract.upsert({
+        id: _getDayId(Number(event.block.timestamp)) + optionContractAddress,
+        create: {
+          amount: totalFee,
+          optionContractId: optionContractAddress,
+          period: Period.daily,
+          settlementFee,
+          timestamp: event.block.timestamp,
+        },
+        update({ current }) {
+          return {
+            amount: current.amount + totalFee,
+            timestamp: event.block.timestamp,
+            settlementFee: current.settlementFee + settlementFee,
+          };
+        },
+      });
+
+      await context.db.OptionContract.update({
+        id: optionContractAddress,
+        data({ current }) {
+          if (userOptionDataEntity.isAbove) {
+            return {
+              openInterestUp:
+                current.openInterestUp + userOptionDataEntity.totalFee,
+              openUp: current.openUp + BigInt(1),
+            };
+          } else {
+            return {
+              openInterestDown:
+                current.openInterestDown + userOptionDataEntity.totalFee,
+              openDown: current.openDown + BigInt(1),
+            };
+          }
+        },
       });
     }
   }
@@ -129,12 +150,31 @@ ponder.on("BufferBinaryOptions:Expire", async ({ context, event }) => {
   });
 
   if (isContractRegisteredToRouter) {
-    await context.db.UserOptionData.update({
+    const userOptionDataEntity = await context.db.UserOptionData.update({
       id: id + optionContractAddress,
       data: ({ current }) => ({
         state: State.expired,
         expirationPrice: priceAtExpiration,
       }),
+    });
+
+    await context.db.OptionContract.update({
+      id: optionContractAddress,
+      data({ current }) {
+        if (userOptionDataEntity.isAbove) {
+          return {
+            openInterestUp:
+              current.openInterestUp + userOptionDataEntity.totalFee,
+            openUp: current.openUp + BigInt(1),
+          };
+        } else {
+          return {
+            openInterestDown:
+              current.openInterestDown + userOptionDataEntity.totalFee,
+            openDown: current.openDown + BigInt(1),
+          };
+        }
+      },
     });
   }
 });
@@ -159,7 +199,7 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
       const { pool, token } = findPoolAndTokenFromPoolAddress(
         optionContractEntity.poolContract
       );
-      await context.db.UserOptionData.update({
+      const userOptionDataEntity = await context.db.UserOptionData.update({
         id: id + optionContractAddress,
         data: ({ current }) => ({
           state: State.exercised,
@@ -167,6 +207,25 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
           payout: profit,
           payoutUSD: convertToUSD(profit, token),
         }),
+      });
+
+      await context.db.OptionContract.update({
+        id: optionContractAddress,
+        data({ current }) {
+          if (userOptionDataEntity.isAbove) {
+            return {
+              openInterestUp:
+                current.openInterestUp + userOptionDataEntity.totalFee,
+              openUp: current.openUp + BigInt(1),
+            };
+          } else {
+            return {
+              openInterestDown:
+                current.openInterestDown + userOptionDataEntity.totalFee,
+              openDown: current.openDown + BigInt(1),
+            };
+          }
+        },
       });
     }
   }

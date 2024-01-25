@@ -71,4 +71,13 @@ export default createSchema((p) => ({
     payoutUSD: p.bigint().optional(),
     totalFeeUSD: p.bigint().optional(),
   }),
+  VolumePerContract: p.createTable({
+    id: p.string(),
+    amount: p.bigint(),
+    period: p.string(),
+    timestamp: p.bigint(),
+    optionContractId: p.string().references("OptionContract.id"),
+    optionContract: p.one("optionContractId"),
+    settlementFee: p.bigint(),
+  }),
 }));

@@ -39,7 +39,7 @@ export default createSchema((p) => ({
     user: p.string(),
     state: p.int(),
     isAbove: p.boolean(),
-    queueId: p.bigint(),
+    queueID: p.bigint(),
     reason: p.string().optional(),
     queueTimestamp: p.bigint(),
     cancelTimestamp: p.bigint(),

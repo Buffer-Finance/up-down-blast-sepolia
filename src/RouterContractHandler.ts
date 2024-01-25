@@ -23,7 +23,7 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
         strike: BigInt(0),
         user: user,
         isAbove: queuedTradeData[4],
-        queueId,
+        queueID: queueId,
         expirationTime: BigInt(queuedTradeData[2]),
         queueTimestamp: BigInt(queuedTradeData[5]),
         totalFee: queuedTradeData[9],

@@ -26,6 +26,8 @@ ponder.on(
       args: [event.log.address],
     });
 
+    const { pool: poolName, token } = findPoolAndTokenFromPoolAddress(pool);
+
     if (isContractRegisteredToRouter) {
       // await context.db.ConfigContract.create({
       //   id: config,
@@ -53,7 +55,7 @@ ponder.on(
           isPaused: false,
           poolContract: pool,
           routerContract: RouterAddress,
-          pool,
+          pool: poolName,
           asset: token0 + token1,
           openUp: BigInt(0),
           openDown: BigInt(0),

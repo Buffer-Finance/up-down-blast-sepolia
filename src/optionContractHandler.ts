@@ -57,6 +57,8 @@ ponder.on(
           asset: token0 + token1,
           openUp: BigInt(0),
           openDown: BigInt(0),
+          openInterestUp: BigInt(0),
+          openInterestDown: BigInt(0),
         },
       });
     }

@@ -13,6 +13,8 @@ export default createSchema((p) => ({
     asset: p.string(),
     openUp: p.bigint(),
     openDown: p.bigint(),
+    openInterestUp: p.bigint(),
+    openInterestDown: p.bigint(),
     configId: p.string().references("ConfigContract.id"),
     configContract: p.one("configId"),
   }),

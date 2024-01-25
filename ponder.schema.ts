@@ -16,7 +16,7 @@ export default createSchema((p) => ({
     openInterestUp: p.bigint(),
     openInterestDown: p.bigint(),
     configId: p.string().references("ConfigContract.id"),
-    configContract: p.one("configId"),
+    config: p.one("configId"),
   }),
   ConfigContract: p.createTable({
     id: p.string(),

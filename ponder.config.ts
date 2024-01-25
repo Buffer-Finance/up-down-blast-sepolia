@@ -3,7 +3,6 @@ import { http } from "viem";
 import { BufferBinaryOptions } from "./abis/BufferBinaryOption";
 import { BufferRouter } from "./abis/BufferRouter";
 import { Config } from "./abis/Config";
-
 export default createConfig({
   networks: {
     blastSepolia: {

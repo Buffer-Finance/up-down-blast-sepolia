@@ -14,7 +14,7 @@ export default createConfig({
     BufferBinaryOptions: {
       network: "blastSepolia",
       abi: BufferBinaryOptions,
-      startBlock: 618614,
+      startBlock: 1004456,
       maxBlockRange: 10000,
       filter: {
         event: [
@@ -29,7 +29,7 @@ export default createConfig({
     OptionsConfig: {
       network: "blastSepolia",
       abi: Config,
-      startBlock: 618614,
+      startBlock: 1004456,
       maxBlockRange: 10000,
       filter: {
         event: [
@@ -48,7 +48,7 @@ export default createConfig({
     RouterContract: {
       network: "blastSepolia",
       abi: BufferRouter,
-      startBlock: 618614,
+      startBlock: 1004456,
       maxBlockRange: 10000,
       filter: {
         event: ["CancelTrade", "InitiateTrade", "OpenTrade"],

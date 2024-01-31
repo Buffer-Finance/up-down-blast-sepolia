@@ -81,7 +81,7 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
         optionContractEntity.poolContract
       );
       const userOptionDataEntity = await context.db.UserOptionData.upsert({
-        id: id.toString() + optionContractAddress.toLowerCase(),
+        id: id.toString() + optionContractAddress,
         create: {
           state: State.active,
           totalFee: totalFee,

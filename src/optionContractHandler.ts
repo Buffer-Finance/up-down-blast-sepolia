@@ -80,7 +80,7 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
         optionContractEntity.poolContract
       );
       const userOptionDataEntity = await context.db.UserOptionData.update({
-        id: id + optionContractAddress,
+        id: id.toString() + optionContractAddress,
         data: ({ current }) => ({
           state: State.active,
           totalFee: totalFee,
@@ -151,7 +151,7 @@ ponder.on("BufferBinaryOptions:Expire", async ({ context, event }) => {
 
   if (isContractRegisteredToRouter) {
     const userOptionDataEntity = await context.db.UserOptionData.update({
-      id: id + optionContractAddress,
+      id: id.toString() + optionContractAddress,
       data: ({ current }) => ({
         state: State.expired,
         expirationPrice: priceAtExpiration,
@@ -200,7 +200,7 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
         optionContractEntity.poolContract
       );
       const userOptionDataEntity = await context.db.UserOptionData.update({
-        id: id + optionContractAddress,
+        id: id.toString() + optionContractAddress,
         data: ({ current }) => ({
           state: State.exercised,
           expirationPrice: priceAtExpiration,

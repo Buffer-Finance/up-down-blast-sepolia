@@ -33,7 +33,7 @@ ponder.on(
         id: event.log.address,
         data: {
           configId: configContractAddress,
-          address: tokenX,
+          address: event.log.address,
           token0,
           token1,
           isPaused: false,

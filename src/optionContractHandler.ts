@@ -198,6 +198,23 @@ ponder.on("BufferBinaryOptions:Expire", async ({ context, event }) => {
         }
       },
     });
+
+    await context.db.VolumePerContract.upsert({
+      id: _getDayId(Number(event.block.timestamp)) + optionContractAddress,
+      create: {
+        amount: premium,
+        optionContractId: optionContractAddress,
+        period: Period.daily,
+        settlementFee: BigInt(0),
+        timestamp: event.block.timestamp,
+      },
+      update({ current }) {
+        return {
+          amount: current.amount + premium,
+          timestamp: event.block.timestamp,
+        };
+      },
+    });
   }
 });
 ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
@@ -247,6 +264,23 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
               openDown: current.openDown + BigInt(1),
             };
           }
+        },
+      });
+
+      await context.db.VolumePerContract.upsert({
+        id: _getDayId(Number(event.block.timestamp)) + optionContractAddress,
+        create: {
+          amount: profit,
+          optionContractId: optionContractAddress,
+          period: Period.daily,
+          settlementFee: BigInt(0),
+          timestamp: event.block.timestamp,
+        },
+        update({ current }) {
+          return {
+            amount: current.amount + profit,
+            timestamp: event.block.timestamp,
+          };
         },
       });
     }

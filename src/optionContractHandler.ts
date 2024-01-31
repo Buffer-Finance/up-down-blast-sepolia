@@ -169,14 +169,14 @@ ponder.on("BufferBinaryOptions:Expire", async ({ context, event }) => {
         if (userOptionDataEntity.isAbove) {
           return {
             openInterestUp:
-              current.openInterestUp + userOptionDataEntity.totalFee,
-            openUp: current.openUp + BigInt(1),
+              current.openInterestUp - userOptionDataEntity.totalFee,
+            openUp: current.openUp - BigInt(1),
           };
         } else {
           return {
             openInterestDown:
-              current.openInterestDown + userOptionDataEntity.totalFee,
-            openDown: current.openDown + BigInt(1),
+              current.openInterestDown - userOptionDataEntity.totalFee,
+            openDown: current.openDown - BigInt(1),
           };
         }
       },
@@ -240,14 +240,14 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
           if (userOptionDataEntity.isAbove) {
             return {
               openInterestUp:
-                current.openInterestUp + userOptionDataEntity.totalFee,
-              openUp: current.openUp + BigInt(1),
+                current.openInterestUp - userOptionDataEntity.totalFee,
+              openUp: current.openUp - BigInt(1),
             };
           } else {
             return {
               openInterestDown:
-                current.openInterestDown + userOptionDataEntity.totalFee,
-              openDown: current.openDown + BigInt(1),
+                current.openInterestDown - userOptionDataEntity.totalFee,
+              openDown: current.openDown - BigInt(1),
             };
           }
         },

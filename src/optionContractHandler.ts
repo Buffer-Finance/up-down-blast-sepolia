@@ -1,4 +1,5 @@
 import { ponder } from "@/generated";
+import { getAddress } from "viem";
 import { BufferBinaryOptions } from "../abis/BufferBinaryOption";
 import { BufferRouter } from "../abis/BufferRouter";
 import { Period, RouterAddress, State } from "./config";
@@ -23,17 +24,17 @@ ponder.on(
       abi: BufferRouter,
       address: RouterAddress,
       functionName: "contractRegistry",
-      args: [event.log.address],
+      args: [getAddress(event.log.address)],
     });
 
     const { pool: poolName, token } = findPoolAndTokenFromPoolAddress(pool);
 
     if (isContractRegisteredToRouter) {
       await context.db.OptionContract.create({
-        id: event.log.address,
+        id: getAddress(event.log.address),
         data: {
           configId: configContractAddress,
-          address: event.log.address,
+          address: getAddress(event.log.address),
           token0,
           token1,
           isPaused: false,
@@ -55,7 +56,7 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
   const { args } = event;
   const { client } = context;
   const { account, id, settlementFee, totalFee } = args;
-  const optionContractAddress = event.log.address;
+  const optionContractAddress = getAddress(event.log.address);
 
   const isContractRegisteredToRouter = await client.readContract({
     abi: BufferRouter,
@@ -161,7 +162,7 @@ ponder.on("BufferBinaryOptions:Expire", async ({ context, event }) => {
   const { args } = event;
   const { client } = context;
   const { id, isAbove, premium, priceAtExpiration } = args;
-  const optionContractAddress = event.log.address;
+  const optionContractAddress = getAddress(event.log.address);
 
   const isContractRegisteredToRouter = await client.readContract({
     abi: BufferRouter,
@@ -203,7 +204,7 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
   const { args } = event;
   const { client } = context;
   const { id, isAbove, account, profit, priceAtExpiration } = args;
-  const optionContractAddress = event.log.address;
+  const optionContractAddress = getAddress(event.log.address);
 
   const isContractRegisteredToRouter = await client.readContract({
     abi: BufferRouter,
@@ -257,7 +258,7 @@ ponder.on("BufferBinaryOptions:Pause", async ({ context, event }) => {
   const { isPaused } = args;
 
   await context.db.OptionContract.update({
-    id: event.log.address,
+    id: getAddress(event.log.address),
     data: {
       isPaused,
     },

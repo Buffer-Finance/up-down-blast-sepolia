@@ -1,11 +1,12 @@
 import { ponder } from "@/generated";
+import { getAddress } from "viem";
 import { BufferRouter } from "../abis/BufferRouter";
 import { RouterAddress, State } from "./config";
 
 ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
   console.log("InitiateTrade");
   const { args } = event;
-  const routerAddress = event.log.address;
+  const routerAddress = getAddress(event.log.address);
   const { queueId, timestamp, user } = args;
 
   if (routerAddress == RouterAddress) {
@@ -15,7 +16,7 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
       functionName: "queuedTrades",
       args: [queueId],
     });
-    const optionContractAddress = queuedTradeData[6];
+    const optionContractAddress = getAddress(queuedTradeData[6]);
     await context.db.QueuedOptionData.create({
       id: queueId.toString() + optionContractAddress,
       data: {
@@ -39,12 +40,13 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
 ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
   console.log("OpenTrade");
   const { args } = event;
-  const routerAddress = event.log.address;
+  const routerAddress = getAddress(event.log.address);
 
   const { queueId, optionId, targetContract, user } = args;
+  const optionContractAddress = getAddress(targetContract);
   if (routerAddress == RouterAddress) {
     const QueuedOptionDataEntity = await context.db.QueuedOptionData.update({
-      id: queueId.toString() + targetContract,
+      id: queueId.toString() + optionContractAddress,
       data: ({ current }) => ({
         state: State.opened,
         processTime: event.block.timestamp,
@@ -53,9 +55,9 @@ ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
     });
 
     await context.db.UserOptionData.create({
-      id: optionId.toString() + targetContract,
+      id: optionId.toString() + optionContractAddress,
       data: {
-        optionContractId: targetContract,
+        optionContractId: optionContractAddress,
         optionID: optionId,
         user: user,
         queueID: queueId,
@@ -74,7 +76,7 @@ ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
 ponder.on("RouterContract:CancelTrade", async ({ context, event }) => {
   console.log("CancelTrade");
   const { args } = event;
-  const routerAddress = event.log.address;
+  const routerAddress = getAddress(event.log.address);
   const { queueId, reason, account } = args;
 
   if (routerAddress == RouterAddress) {
@@ -84,7 +86,7 @@ ponder.on("RouterContract:CancelTrade", async ({ context, event }) => {
       functionName: "queuedTrades",
       args: [queueId],
     });
-    const optionContractAddress = queuedTradeData[6];
+    const optionContractAddress = getAddress(queuedTradeData[6]);
     await context.db.QueuedOptionData.update({
       id: queueId.toString() + optionContractAddress,
       data: ({ current }) => ({

@@ -80,9 +80,9 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
       const { pool, token } = findPoolAndTokenFromPoolAddress(
         optionContractEntity.poolContract
       );
-      const userOptionDataEntity = await context.db.UserOptionData.upsert({
+      const userOptionDataEntity = await context.db.UserOptionData.create({
         id: id.toString() + optionContractAddress,
-        create: {
+        data: {
           state: State.active,
           totalFee: totalFee,
           totalFeeUSD: convertToUSD(totalFee, token),
@@ -99,23 +99,6 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
           queuedTimestamp: BigInt(optionData[3]),
           lag: BigInt(0),
         },
-        update: ({ current }) => ({
-          state: State.active,
-          totalFee: totalFee,
-          totalFeeUSD: convertToUSD(totalFee, token),
-          settlementFee: settlementFee,
-          user: account,
-          strike: optionData[1],
-          expirationTime: BigInt(optionData[2]),
-          creationTime: BigInt(optionData[3]),
-          isAbove: optionData[4],
-          amount: optionData[5],
-          depositToken: token,
-          optionContractId: optionContractAddress,
-          optionID: id,
-          // queuedTimestamp: BigInt(optionData[3]),
-          // lag: BigInt(0),
-        }),
       });
 
       await context.db.VolumePerContract.upsert({

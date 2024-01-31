@@ -36,7 +36,6 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
     });
   }
 });
-
 ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
   console.log("OpenTrade");
   const { args } = event;

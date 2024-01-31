@@ -3,6 +3,7 @@ import { BufferRouter } from "../abis/BufferRouter";
 import { RouterAddress, State } from "./config";
 
 ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
+  console.log("InitiateTrade");
   const { args } = event;
   const routerAddress = event.log.address;
   const { queueId, timestamp, user } = args;
@@ -35,11 +36,13 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
     });
   }
 });
+
 ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
+  console.log("OpenTrade");
   const { args } = event;
   const routerAddress = event.log.address;
-  const { queueId, optionId, targetContract, user } = args;
 
+  const { queueId, optionId, targetContract, user } = args;
   if (routerAddress == RouterAddress) {
     const QueuedOptionDataEntity = await context.db.QueuedOptionData.update({
       id: queueId.toString() + targetContract,
@@ -68,7 +71,9 @@ ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
     });
   }
 });
+
 ponder.on("RouterContract:CancelTrade", async ({ context, event }) => {
+  console.log("CancelTrade");
   const { args } = event;
   const routerAddress = event.log.address;
   const { queueId, reason, account } = args;

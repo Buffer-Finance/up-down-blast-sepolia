@@ -64,10 +64,6 @@ ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
         queuedTimestamp: QueuedOptionDataEntity.queueTimestamp,
         lag:
           event.block.timestamp - BigInt(QueuedOptionDataEntity.queueTimestamp),
-        state: State.opened,
-        amount: BigInt(0),
-        totalFee: BigInt(0),
-        totalFeeUSD: BigInt(0),
       },
     });
   }

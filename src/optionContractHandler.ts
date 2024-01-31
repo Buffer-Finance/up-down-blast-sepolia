@@ -97,7 +97,6 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
           optionID: id,
           queuedTimestamp: BigInt(optionData[3]),
           lag: BigInt(0),
-          queueID: id,
         },
         update: ({ current }) => ({
           state: State.active,

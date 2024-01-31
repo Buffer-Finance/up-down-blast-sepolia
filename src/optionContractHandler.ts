@@ -57,7 +57,7 @@ ponder.on("BufferBinaryOptions:Create", async ({ context, event }) => {
   const { client } = context;
   const { account, id, settlementFee, totalFee } = args;
   const optionContractAddress = getAddress(event.log.address);
-
+  console.log("Create");
   const isContractRegisteredToRouter = await client.readContract({
     abi: BufferRouter,
     address: RouterAddress,

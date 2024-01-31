@@ -193,8 +193,11 @@ ponder.on("BufferBinaryOptions:Expire", async ({ context, event }) => {
       },
       update({ current }) {
         return {
-          amount: current.amount + premium,
+          amount: current.amount - userOptionDataEntity.amount,
           timestamp: event.block.timestamp,
+          settlementFee:
+            current.settlementFee -
+            (userOptionDataEntity.settlementFee || BigInt(0)),
         };
       },
     });
@@ -261,8 +264,11 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
         },
         update({ current }) {
           return {
-            amount: current.amount + profit,
+            amount: current.amount - userOptionDataEntity.amount,
             timestamp: event.block.timestamp,
+            settlementFee:
+              current.settlementFee -
+              (userOptionDataEntity.settlementFee || BigInt(0)),
           };
         },
       });

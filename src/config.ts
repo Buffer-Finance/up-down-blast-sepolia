@@ -22,7 +22,7 @@ export enum Period {
   total = "total",
 }
 
-export const RouterAddress = "0xaf6782306B3d680aB766c42198e410e2bA29989a";
+export const RouterAddress = "0x537fe657b5F6Db1630901d09473Bc6112d4f4B27";
 
 export const USDC_POOL_CONTRACT = "0x2f4ea9d62C9Cb5Ae22f9c1F8472319Ea9A08D93c";
 export const ARB_POOL_CONTRACT = "0x0C42C958C9Bc6B555F4e8e1AFC36dEd95CB05a24";

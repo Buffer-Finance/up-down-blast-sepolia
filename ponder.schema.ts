@@ -36,7 +36,7 @@ export default createSchema((p) => ({
     cancelTimestamp: p.bigint(),
     lag: p.bigint(),
     processTime: p.bigint(),
-    tournamentId: p.bigint().optional(),
+    tournamentId: p.bigint().references("Tournament.id"),
     tournament: p.one("tournamentId"),
   }),
   UserOptionData: p.createTable({
@@ -58,7 +58,7 @@ export default createSchema((p) => ({
     queueID: p.bigint().optional(),
     settlementFee: p.bigint().optional(),
     lag: p.bigint(),
-    tournamentId: p.bigint().optional(),
+    tournamentId: p.bigint().references("Tournament.id"),
     tournament: p.one("tournamentId"),
   }),
   Tournament: p.createTable({

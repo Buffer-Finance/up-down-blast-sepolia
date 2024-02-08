@@ -2,8 +2,11 @@ export const BufferRouter = [
   {
     inputs: [
       { internalType: "address", name: "_publisher", type: "address" },
-      { internalType: "address", name: "_admin", type: "address" },
-      { internalType: "contract IPyth", name: "_pyth", type: "address" },
+      {
+        internalType: "address",
+        name: "_tournamentManager",
+        type: "address",
+      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -25,6 +28,12 @@ export const BufferRouter = [
       },
       {
         indexed: false,
+        internalType: "uint256",
+        name: "tournamentId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
         internalType: "string",
         name: "reason",
         type: "string",
@@ -38,25 +47,6 @@ export const BufferRouter = [
     inputs: [
       {
         indexed: false,
-        internalType: "address",
-        name: "targetContract",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "register",
-        type: "bool",
-      },
-    ],
-    name: "ContractRegistryUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         internalType: "uint256",
         name: "queueId",
         type: "uint256",
@@ -75,41 +65,10 @@ export const BufferRouter = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
         indexed: false,
-        internalType: "address",
-        name: "tokenX",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "reason",
-        type: "string",
-      },
-    ],
-    name: "FailRevoke",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         internalType: "uint256",
         name: "optionId",
         type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "targetContract",
-        type: "address",
       },
       {
         indexed: false,
@@ -127,7 +86,7 @@ export const BufferRouter = [
       {
         indexed: true,
         internalType: "address",
-        name: "user",
+        name: "account",
         type: "address",
       },
       {
@@ -139,7 +98,13 @@ export const BufferRouter = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "timestamp",
+        name: "tournamentId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "queuedTime",
         type: "uint256",
       },
     ],
@@ -152,29 +117,48 @@ export const BufferRouter = [
       {
         indexed: true,
         internalType: "address",
-        name: "user",
+        name: "account",
         type: "address",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
         name: "queueId",
         type: "uint256",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
-        name: "optionId",
+        name: "tournamentId",
         type: "uint256",
       },
       {
         indexed: false,
+        internalType: "uint256",
+        name: "optionId",
+        type: "uint256",
+      },
+    ],
+    name: "OpenTrade",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
         name: "targetContract",
         type: "address",
       },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "isRegistered",
+        type: "bool",
+      },
     ],
-    name: "OpenTrade",
+    name: "RegisterContract",
     type: "event",
   },
   {
@@ -260,27 +244,6 @@ export const BufferRouter = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "MAXIMUM_PRICE_DELAY_FOR_RESOLVING",
-    outputs: [{ internalType: "uint64", name: "", type: "uint64" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MAX_WAIT_TIME",
-    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "admin",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "uint256", name: "queueId", type: "uint256" }],
     name: "cancelQueuedTrade",
     outputs: [],
@@ -292,52 +255,6 @@ export const BufferRouter = [
     name: "contractRegistry",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          { internalType: "uint256", name: "optionId", type: "uint256" },
-          {
-            internalType: "address",
-            name: "targetContract",
-            type: "address",
-          },
-          {
-            internalType: "bytes[]",
-            name: "priceUpdateData",
-            type: "bytes[]",
-          },
-          {
-            internalType: "bytes32[]",
-            name: "priceIds",
-            type: "bytes32[]",
-          },
-        ],
-        internalType: "struct IBufferRouter.CloseTradeParams[]",
-        name: "optionData",
-        type: "tuple[]",
-      },
-    ],
-    name: "executeOptions",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint32", name: "timestamp", type: "uint32" },
-      {
-        internalType: "bytes[]",
-        name: "priceUpdateData",
-        type: "bytes[]",
-      },
-      { internalType: "bytes32[]", name: "priceId", type: "bytes32[]" },
-    ],
-    name: "getPrice",
-    outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -369,31 +286,33 @@ export const BufferRouter = [
   },
   {
     inputs: [
+      { internalType: "uint256", name: "totalFee", type: "uint256" },
+      { internalType: "uint256", name: "period", type: "uint256" },
+      { internalType: "bool", name: "isAbove", type: "bool" },
       {
-        components: [
-          {
-            internalType: "address",
-            name: "targetContract",
-            type: "address",
-          },
-          {
-            internalType: "bool",
-            name: "allowPartialFill",
-            type: "bool",
-          },
-          { internalType: "bool", name: "isAbove", type: "bool" },
-          { internalType: "uint32", name: "expiration", type: "uint32" },
-          { internalType: "uint256", name: "totalFee", type: "uint256" },
-          { internalType: "string", name: "referralCode", type: "string" },
-        ],
-        internalType: "struct IBufferRouter.TradeInitiationParamas",
-        name: "params",
-        type: "tuple",
+        internalType: "address",
+        name: "targetContract",
+        type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "expectedStrike",
+        type: "uint256",
+      },
+      { internalType: "uint256", name: "slippage", type: "uint256" },
+      { internalType: "uint256", name: "traderNFTId", type: "uint256" },
+      { internalType: "uint256", name: "tournamentId", type: "uint256" },
     ],
     name: "initiateTrade",
     outputs: [{ internalType: "uint256", name: "queueId", type: "uint256" }],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "isInPrivateKeeperMode",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -413,11 +332,27 @@ export const BufferRouter = [
   {
     inputs: [
       { internalType: "address", name: "", type: "address" },
-      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256[]", name: "", type: "uint256[]" },
+      { internalType: "uint256[]", name: "", type: "uint256[]" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
-    name: "optionIdMapping",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
+    name: "onERC1155BatchReceived",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC1155Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -428,30 +363,34 @@ export const BufferRouter = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "pyth",
-    outputs: [{ internalType: "contract IPyth", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     name: "queuedTrades",
     outputs: [
+      { internalType: "uint256", name: "queueId", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "userQueueIndex",
+        type: "uint256",
+      },
       { internalType: "address", name: "user", type: "address" },
-      { internalType: "bool", name: "allowPartialFill", type: "bool" },
-      { internalType: "uint32", name: "expiration", type: "uint32" },
-      { internalType: "bool", name: "isQueued", type: "bool" },
+      { internalType: "uint256", name: "totalFee", type: "uint256" },
+      { internalType: "uint256", name: "period", type: "uint256" },
       { internalType: "bool", name: "isAbove", type: "bool" },
-      { internalType: "uint32", name: "queuedTime", type: "uint32" },
       {
         internalType: "address",
         name: "targetContract",
         type: "address",
       },
-      { internalType: "string", name: "referralCode", type: "string" },
-      { internalType: "uint256", name: "optionId", type: "uint256" },
-      { internalType: "uint256", name: "totalFee", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "expectedStrike",
+        type: "uint256",
+      },
+      { internalType: "uint256", name: "slippage", type: "uint256" },
+      { internalType: "uint256", name: "queuedTime", type: "uint256" },
+      { internalType: "bool", name: "isQueued", type: "bool" },
+      { internalType: "uint256", name: "traderNFTId", type: "uint256" },
+      { internalType: "uint256", name: "tournamentId", type: "uint256" },
     ],
     stateMutability: "view",
     type: "function",
@@ -471,44 +410,18 @@ export const BufferRouter = [
       {
         components: [
           { internalType: "uint256", name: "queueId", type: "uint256" },
-          { internalType: "uint256", name: "sf", type: "uint256" },
-          {
-            internalType: "uint256",
-            name: "revisedFee",
-            type: "uint256",
-          },
-          {
-            components: [
-              { internalType: "bytes", name: "signature", type: "bytes" },
-              {
-                internalType: "uint256",
-                name: "timestamp",
-                type: "uint256",
-              },
-            ],
-            internalType: "struct IBufferRouter.SignInfo",
-            name: "sfSignInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes[]",
-            name: "priceUpdateData",
-            type: "bytes[]",
-          },
-          {
-            internalType: "bytes32[]",
-            name: "priceIds",
-            type: "bytes32[]",
-          },
+          { internalType: "uint256", name: "timestamp", type: "uint256" },
+          { internalType: "uint256", name: "price", type: "uint256" },
+          { internalType: "bytes", name: "signature", type: "bytes" },
         ],
-        internalType: "struct IBufferRouter.ResolveTradeParams[]",
+        internalType: "struct IBufferRouter.OpenTradeParams[]",
         name: "params",
         type: "tuple[]",
       },
     ],
     name: "resolveQueuedTrades",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -536,6 +449,13 @@ export const BufferRouter = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "setInPrivateKeeperMode",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "address", name: "_keeper", type: "address" },
       { internalType: "bool", name: "_isActive", type: "bool" },
@@ -549,6 +469,85 @@ export const BufferRouter = [
     inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
     name: "supportsInterface",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tournamentManager",
+    outputs: [
+      {
+        internalType: "contract ITournamentManager",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "optionId", type: "uint256" },
+          {
+            internalType: "address",
+            name: "targetContract",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "expiryTimestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "priceAtExpiry",
+            type: "uint256",
+          },
+          { internalType: "bytes", name: "signature", type: "bytes" },
+        ],
+        internalType: "struct IBufferRouter.CloseTradeParams[]",
+        name: "optionData",
+        type: "tuple[]",
+      },
+    ],
+    name: "unlockOptions",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "userCancelledQueueCount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "userCancelledQueuedIds",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "userQueueCount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "userQueuedIds",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },

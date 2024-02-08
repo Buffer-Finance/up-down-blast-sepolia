@@ -1,5 +1,26 @@
 export const BufferBinaryOptions = [
-  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    inputs: [
+      {
+        internalType: "contract IOptionsConfig",
+        name: "_config",
+        type: "address",
+      },
+      {
+        internalType: "enum IBufferBinaryOptions.AssetCategory",
+        name: "_category",
+        type: "uint8",
+      },
+      { internalType: "string", name: "_assetPair", type: "string" },
+      {
+        internalType: "address",
+        name: "_tournamentManager",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
   {
     anonymous: false,
     inputs: [
@@ -66,6 +87,12 @@ export const BufferBinaryOptions = [
         type: "uint256",
       },
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "tournamentId",
+        type: "uint256",
+      },
+      {
         indexed: false,
         internalType: "uint256",
         name: "settlementFee",
@@ -92,36 +119,12 @@ export const BufferBinaryOptions = [
       },
       {
         indexed: false,
-        internalType: "address",
-        name: "pool",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "tokenX",
-        type: "address",
-      },
-      {
-        indexed: false,
         internalType: "string",
-        name: "token0",
+        name: "assetPair",
         type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "token1",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "enum IBufferBinaryOptions.AssetCategory",
-        name: "category",
-        type: "uint8",
       },
     ],
-    name: "CreateOptionsContract",
+    name: "CreateContract",
     type: "event",
   },
   {
@@ -147,15 +150,9 @@ export const BufferBinaryOptions = [
       },
       {
         indexed: false,
-        internalType: "uint128",
+        internalType: "uint256",
         name: "priceAtExpiration",
-        type: "uint128",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isAbove",
-        type: "bool",
+        type: "uint256",
       },
     ],
     name: "Exercise",
@@ -173,61 +170,17 @@ export const BufferBinaryOptions = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "premium",
+        name: "loss",
         type: "uint256",
       },
       {
         indexed: false,
-        internalType: "uint128",
+        internalType: "uint256",
         name: "priceAtExpiration",
-        type: "uint128",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isAbove",
-        type: "bool",
+        type: "uint256",
       },
     ],
     name: "Expire",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "LpLoss",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "LpProfit",
     type: "event",
   },
   {
@@ -344,64 +297,8 @@ export const BufferBinaryOptions = [
     type: "event",
   },
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "referrer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isReferralValid",
-        type: "bool",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "totalFee",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "referrerFee",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "rebate",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "referralCode",
-        type: "string",
-      },
-    ],
-    name: "UpdateReferral",
-    type: "event",
-  },
-  {
     inputs: [],
     name: "DEFAULT_ADMIN_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "PAUSER_ROLE",
     outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
     stateMutability: "view",
     type: "function",
@@ -415,39 +312,22 @@ export const BufferBinaryOptions = [
   },
   {
     inputs: [
+      { internalType: "address", name: "user", type: "address" },
+      { internalType: "uint256", name: "traderNFTId", type: "uint256" },
+    ],
+    name: "_getSettlementFeeDiscount",
+    outputs: [{ internalType: "uint8", name: "maxStep", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "tokenId", type: "uint256" },
     ],
     name: "approve",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "addressToApprove",
-        type: "address",
-      },
-    ],
-    name: "approveAddress",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "approvePoolToTransferTokenX",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "approvedAddresses",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -479,6 +359,20 @@ export const BufferBinaryOptions = [
   },
   {
     inputs: [],
+    name: "baseSettlementFeePercentageForAbove",
+    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "baseSettlementFeePercentageForBelow",
+    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "config",
     outputs: [
       {
@@ -494,24 +388,28 @@ export const BufferBinaryOptions = [
     inputs: [
       {
         components: [
-          { internalType: "address", name: "user", type: "address" },
-          { internalType: "bool", name: "isAbove", type: "bool" },
-          { internalType: "uint32", name: "expiration", type: "uint32" },
-          { internalType: "uint256", name: "sf", type: "uint256" },
+          { internalType: "uint256", name: "strike", type: "uint256" },
           { internalType: "uint256", name: "amount", type: "uint256" },
+          { internalType: "uint256", name: "period", type: "uint256" },
+          { internalType: "bool", name: "isAbove", type: "bool" },
           { internalType: "uint256", name: "totalFee", type: "uint256" },
+          { internalType: "address", name: "user", type: "address" },
           {
-            internalType: "uint128",
-            name: "currentPrice",
-            type: "uint128",
+            internalType: "uint256",
+            name: "traderNFTId",
+            type: "uint256",
           },
-          { internalType: "string", name: "referralCode", type: "string" },
+          {
+            internalType: "uint256",
+            name: "tournamentId",
+            type: "uint256",
+          },
         ],
         internalType: "struct IBufferBinaryOptions.OptionParams",
         name: "optionParams",
         type: "tuple",
       },
-      { internalType: "uint32", name: "queuedTime", type: "uint32" },
+      { internalType: "uint256", name: "queuedTime", type: "uint256" },
     ],
     name: "createFromRouter",
     outputs: [{ internalType: "uint256", name: "optionID", type: "uint256" }],
@@ -527,41 +425,10 @@ export const BufferBinaryOptions = [
   },
   {
     inputs: [
-      {
-        components: [
-          { internalType: "address", name: "user", type: "address" },
-          { internalType: "bool", name: "isAbove", type: "bool" },
-          { internalType: "uint32", name: "expiration", type: "uint32" },
-          { internalType: "uint256", name: "sf", type: "uint256" },
-          { internalType: "uint256", name: "amount", type: "uint256" },
-          { internalType: "uint256", name: "totalFee", type: "uint256" },
-          {
-            internalType: "uint128",
-            name: "currentPrice",
-            type: "uint128",
-          },
-          { internalType: "string", name: "referralCode", type: "string" },
-        ],
-        internalType: "struct IBufferBinaryOptions.OptionParams",
-        name: "optionParams",
-        type: "tuple",
-      },
-    ],
-    name: "evaluateParams",
-    outputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
       { internalType: "uint256", name: "amount", type: "uint256" },
       { internalType: "address", name: "user", type: "address" },
-      { internalType: "string", name: "referralCode", type: "string" },
-      {
-        internalType: "uint256",
-        name: "baseSettlementFeePercentage",
-        type: "uint256",
-      },
+      { internalType: "bool", name: "isAbove", type: "bool" },
+      { internalType: "uint256", name: "traderNFTId", type: "uint256" },
     ],
     name: "fees",
     outputs: [
@@ -573,6 +440,37 @@ export const BufferBinaryOptions = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "strike", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
+          { internalType: "uint256", name: "period", type: "uint256" },
+          { internalType: "bool", name: "isAbove", type: "bool" },
+          { internalType: "uint256", name: "totalFee", type: "uint256" },
+          { internalType: "address", name: "user", type: "address" },
+          {
+            internalType: "uint256",
+            name: "traderNFTId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "tournamentId",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct IBufferBinaryOptions.OptionParams",
+        name: "optionParams",
+        type: "tuple",
+      },
+    ],
+    name: "getAmount",
+    outputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "getApproved",
     outputs: [{ internalType: "address", name: "", type: "address" }],
@@ -580,46 +478,9 @@ export const BufferBinaryOptions = [
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "address", name: "referrer", type: "address" },
-      { internalType: "address", name: "user", type: "address" },
-    ],
-    name: "getReferralDiscount",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "referralDiscount",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "bytes32", name: "role", type: "bytes32" }],
     name: "getRoleAdmin",
     outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "referrer", type: "address" },
-      { internalType: "address", name: "user", type: "address" },
-      {
-        internalType: "uint256",
-        name: "baseSettlementFeePercentage",
-        type: "uint256",
-      },
-    ],
-    name: "getSettlementFeePercentage",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "settlementFeePercentage",
-        type: "uint256",
-      },
-    ],
     stateMutability: "view",
     type: "function",
   },
@@ -645,41 +506,6 @@ export const BufferBinaryOptions = [
   },
   {
     inputs: [
-      {
-        internalType: "contract ERC20",
-        name: "_tokenX",
-        type: "address",
-      },
-      {
-        internalType: "contract ILiquidityPool",
-        name: "_pool",
-        type: "address",
-      },
-      {
-        internalType: "contract IOptionsConfig",
-        name: "_config",
-        type: "address",
-      },
-      {
-        internalType: "contract IReferralStorage",
-        name: "_referral",
-        type: "address",
-      },
-      {
-        internalType: "enum IBufferBinaryOptions.AssetCategory",
-        name: "_category",
-        type: "uint8",
-      },
-      { internalType: "string", name: "_token0", type: "string" },
-      { internalType: "string", name: "_token1", type: "string" },
-    ],
-    name: "initialize",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       { internalType: "address", name: "owner", type: "address" },
       { internalType: "address", name: "operator", type: "address" },
     ],
@@ -689,17 +515,21 @@ export const BufferBinaryOptions = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint32", name: "expiration", type: "uint32" }],
-    name: "isExpirationValid",
+    inputs: [],
+    name: "isPaused",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
-    name: "isPaused",
+    inputs: [
+      { internalType: "uint256", name: "slippage", type: "uint256" },
+      { internalType: "uint256", name: "strike", type: "uint256" },
+      { internalType: "uint256", name: "expectedStrike", type: "uint256" },
+    ],
+    name: "isStrikeValid",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
+    stateMutability: "pure",
     type: "function",
   },
   {
@@ -717,6 +547,20 @@ export const BufferBinaryOptions = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+    name: "nftTierStep",
+    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "optionIdToTournament",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     name: "options",
     outputs: [
@@ -725,14 +569,14 @@ export const BufferBinaryOptions = [
         name: "state",
         type: "uint8",
       },
-      { internalType: "uint128", name: "strike", type: "uint128" },
-      { internalType: "uint32", name: "expiration", type: "uint32" },
-      { internalType: "uint32", name: "createdAt", type: "uint32" },
-      { internalType: "bool", name: "isAbove", type: "bool" },
+      { internalType: "uint256", name: "strike", type: "uint256" },
       { internalType: "uint256", name: "amount", type: "uint256" },
       { internalType: "uint256", name: "lockedAmount", type: "uint256" },
       { internalType: "uint256", name: "premium", type: "uint256" },
+      { internalType: "uint256", name: "expiration", type: "uint256" },
+      { internalType: "bool", name: "isAbove", type: "bool" },
       { internalType: "uint256", name: "totalFee", type: "uint256" },
+      { internalType: "uint256", name: "createdAt", type: "uint256" },
     ],
     stateMutability: "view",
     type: "function",
@@ -741,32 +585,6 @@ export const BufferBinaryOptions = [
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "ownerOf",
     outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pool",
-    outputs: [
-      {
-        internalType: "contract ILiquidityPool",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "referral",
-    outputs: [
-      {
-        internalType: "contract IReferralStorage",
-        name: "",
-        type: "address",
-      },
-    ],
     stateMutability: "view",
     type: "function",
   },
@@ -792,7 +610,8 @@ export const BufferBinaryOptions = [
   },
   {
     inputs: [
-      { internalType: "uint32", name: "expiration", type: "uint32" },
+      { internalType: "uint256", name: "slippage", type: "uint256" },
+      { internalType: "uint256", name: "period", type: "uint256" },
       { internalType: "uint256", name: "totalFee", type: "uint256" },
     ],
     name: "runInitialChecks",
@@ -834,8 +653,27 @@ export const BufferBinaryOptions = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "setIsPaused",
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "_baseSettlementFeePercentageForAbove",
+        type: "uint16",
+      },
+      {
+        internalType: "uint16",
+        name: "_baseSettlementFeePercentageForBelow",
+        type: "uint16",
+      },
+      { internalType: "uint8[4]", name: "_nftTierStep", type: "uint8[4]" },
+    ],
+    name: "setConfigure",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bool", name: "_isPaused", type: "bool" }],
+    name: "setCreation",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -862,20 +700,6 @@ export const BufferBinaryOptions = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "token0",
-    outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "token1",
-    outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "tokenURI",
     outputs: [{ internalType: "string", name: "", type: "string" }],
@@ -884,8 +708,14 @@ export const BufferBinaryOptions = [
   },
   {
     inputs: [],
-    name: "tokenX",
-    outputs: [{ internalType: "contract ERC20", name: "", type: "address" }],
+    name: "tournamentManager",
+    outputs: [
+      {
+        internalType: "contract ITournamentManager",
+        name: "",
+        type: "address",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
@@ -903,11 +733,25 @@ export const BufferBinaryOptions = [
   {
     inputs: [
       { internalType: "uint256", name: "optionID", type: "uint256" },
-      { internalType: "uint128", name: "closingPrice", type: "uint128" },
+      {
+        internalType: "uint256",
+        name: "priceAtExpiration",
+        type: "uint256",
+      },
     ],
     name: "unlock",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "userOptionIds",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
 ] as const;

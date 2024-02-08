@@ -7,7 +7,7 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
   console.log("InitiateTrade");
   const { args } = event;
   const routerAddress = getAddress(event.log.address);
-  const { queueId, timestamp, user } = args;
+  const { queueId, account, queuedTime, tournamentId } = args;
 
   if (routerAddress == RouterAddress) {
     const queuedTradeData = await context.client.readContract({
@@ -22,13 +22,15 @@ ponder.on("RouterContract:InitiateTrade", async ({ context, event }) => {
       data: {
         optionContractId: optionContractAddress,
         state: State.queued,
-        strike: BigInt(0),
-        user: user,
-        isAbove: queuedTradeData[4],
+        strike: queuedTradeData[7],
+        user: account,
+        isAbove: queuedTradeData[5],
         queueID: queueId,
-        expirationTime: BigInt(queuedTradeData[2]),
-        queueTimestamp: BigInt(queuedTradeData[5]),
-        totalFee: queuedTradeData[9],
+        slippage: queuedTradeData[8],
+        // expirationTime: BigInt(queuedTradeData[2]),
+        queueTimestamp: queuedTime,
+        totalFee: queuedTradeData[3],
+        tournamentId: tournamentId,
         reason: undefined,
         cancelTimestamp: BigInt(0),
         lag: BigInt(0),
@@ -42,8 +44,14 @@ ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
   const { args } = event;
   const routerAddress = getAddress(event.log.address);
 
-  const { queueId, optionId, targetContract, user } = args;
-  const optionContractAddress = getAddress(targetContract);
+  const { queueId, optionId, account, tournamentId } = args;
+  const queuedTradeData = await context.client.readContract({
+    abi: BufferRouter,
+    address: RouterAddress,
+    functionName: "queuedTrades",
+    args: [queueId],
+  });
+  const optionContractAddress = getAddress(queuedTradeData[6]);
   if (routerAddress == RouterAddress) {
     const QueuedOptionDataEntity = await context.db.QueuedOptionData.update({
       id: queueId.toString() + optionContractAddress,
@@ -57,9 +65,6 @@ ponder.on("RouterContract:OpenTrade", async ({ context, event }) => {
     await context.db.UserOptionData.update({
       id: optionId.toString() + optionContractAddress,
       data: {
-        optionContractId: optionContractAddress,
-        optionID: optionId,
-        user: user,
         queueID: queueId,
         queuedTimestamp: QueuedOptionDataEntity.queueTimestamp,
         lag:
@@ -73,7 +78,7 @@ ponder.on("RouterContract:CancelTrade", async ({ context, event }) => {
   console.log("CancelTrade");
   const { args } = event;
   const routerAddress = getAddress(event.log.address);
-  const { queueId, reason, account } = args;
+  const { queueId, reason, account, tournamentId } = args;
 
   if (routerAddress == RouterAddress) {
     const queuedTradeData = await context.client.readContract({

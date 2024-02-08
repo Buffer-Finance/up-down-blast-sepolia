@@ -7,6 +7,14 @@ export enum State {
   opened = 6,
 }
 
+export enum TournamentState {
+  created = "Created",
+  verified = "Upcoming",
+  started = "Live",
+  closed = "Closed",
+  ended = "Closed",
+}
+
 export enum Period {
   hourly = "hourly",
   daily = "daily",
@@ -15,6 +23,7 @@ export enum Period {
 }
 
 export const RouterAddress = "0xaf6782306B3d680aB766c42198e410e2bA29989a";
+
 export const USDC_POOL_CONTRACT = "0x2f4ea9d62C9Cb5Ae22f9c1F8472319Ea9A08D93c";
 export const ARB_POOL_CONTRACT = "0x0C42C958C9Bc6B555F4e8e1AFC36dEd95CB05a24";
 

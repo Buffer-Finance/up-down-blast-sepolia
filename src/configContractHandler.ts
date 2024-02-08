@@ -10,19 +10,14 @@ ponder.on("OptionsConfig:UpdateMinFee", async ({ context, event }) => {
       address: event.log.address,
       minFee: args.value,
       creationWindowContract: zeroAddress,
-      circuitBreakerContract: zeroAddress,
-      optionStorageContract: zeroAddress,
-      platformFee: BigInt(0),
-      sfdContract: zeroAddress,
-      sf: BigInt(0),
-      traderNFTContract: zeroAddress,
-      stepSize: BigInt(0),
+      maxFee: BigInt(0),
+      maxPeriod: 0,
+      minPeriod: 0,
     },
-    update: ({ current }) => ({
-      minFee: args.value,
-    }),
+    update: { minFee: args.value },
   });
 });
+
 ponder.on(
   "OptionsConfig:UpdateCreationWindowContract",
   async ({ context, event }) => {
@@ -34,71 +29,16 @@ ponder.on(
         address: event.log.address,
         minFee: BigInt(0),
         creationWindowContract: args.value,
-        circuitBreakerContract: zeroAddress,
-        optionStorageContract: zeroAddress,
-        platformFee: BigInt(0),
-        sfdContract: zeroAddress,
-        sf: BigInt(0),
-        traderNFTContract: zeroAddress,
-        stepSize: BigInt(0),
+        maxFee: BigInt(0),
+        maxPeriod: 0,
+        minPeriod: 0,
       },
-      update: ({ current }) => ({
-        creationWindowContract: args.value,
-      }),
+      update: { creationWindowContract: args.value },
     });
   }
 );
-ponder.on(
-  "OptionsConfig:UpdateCircuitBreakerContract",
-  async ({ context, event }) => {
-    const { args } = event;
 
-    await context.db.ConfigContract.upsert({
-      id: event.log.address,
-      create: {
-        address: event.log.address,
-        minFee: BigInt(0),
-        creationWindowContract: zeroAddress,
-        circuitBreakerContract: args._circuitBreakerContract,
-        optionStorageContract: zeroAddress,
-        platformFee: BigInt(0),
-        sfdContract: zeroAddress,
-        sf: BigInt(0),
-        traderNFTContract: zeroAddress,
-        stepSize: BigInt(0),
-      },
-      update: ({ current }) => ({
-        circuitBreakerContract: args._circuitBreakerContract,
-      }),
-    });
-  }
-);
-ponder.on(
-  "OptionsConfig:UpdateOptionStorageContract",
-  async ({ context, event }) => {
-    const { args } = event;
-
-    await context.db.ConfigContract.upsert({
-      id: event.log.address,
-      create: {
-        address: event.log.address,
-        minFee: BigInt(0),
-        creationWindowContract: zeroAddress,
-        circuitBreakerContract: zeroAddress,
-        optionStorageContract: args.value,
-        platformFee: BigInt(0),
-        sfdContract: zeroAddress,
-        sf: BigInt(0),
-        traderNFTContract: zeroAddress,
-        stepSize: BigInt(0),
-      },
-      update: ({ current }) => ({
-        optionStorageContract: args.value,
-      }),
-    });
-  }
-);
-ponder.on("OptionsConfig:UpdatePlatformFee", async ({ context, event }) => {
+ponder.on("OptionsConfig:UpdateMaxFee", async ({ context, event }) => {
   const { args } = event;
 
   await context.db.ConfigContract.upsert({
@@ -107,45 +47,15 @@ ponder.on("OptionsConfig:UpdatePlatformFee", async ({ context, event }) => {
       address: event.log.address,
       minFee: BigInt(0),
       creationWindowContract: zeroAddress,
-      circuitBreakerContract: zeroAddress,
-      optionStorageContract: zeroAddress,
-      platformFee: args._platformFee,
-      sfdContract: zeroAddress,
-      sf: BigInt(0),
-      traderNFTContract: zeroAddress,
-      stepSize: BigInt(0),
+      maxFee: args.value,
+      maxPeriod: 0,
+      minPeriod: 0,
     },
-    update: ({ current }) => ({
-      platformFee: args._platformFee,
-    }),
+    update: { maxFee: args.value },
   });
 });
-ponder.on(
-  "OptionsConfig:UpdateSettlementFeeDisbursalContract",
-  async ({ context, event }) => {
-    const { args } = event;
 
-    await context.db.ConfigContract.upsert({
-      id: event.log.address,
-      create: {
-        address: event.log.address,
-        minFee: BigInt(0),
-        creationWindowContract: zeroAddress,
-        circuitBreakerContract: zeroAddress,
-        optionStorageContract: zeroAddress,
-        platformFee: BigInt(0),
-        sfdContract: args.value,
-        sf: BigInt(0),
-        traderNFTContract: zeroAddress,
-        stepSize: BigInt(0),
-      },
-      update: ({ current }) => ({
-        sfdContract: args.value,
-      }),
-    });
-  }
-);
-ponder.on("OptionsConfig:UpdateSf", async ({ context, event }) => {
+ponder.on("OptionsConfig:UpdateMaxPeriod", async ({ context, event }) => {
   const { args } = event;
 
   await context.db.ConfigContract.upsert({
@@ -154,45 +64,15 @@ ponder.on("OptionsConfig:UpdateSf", async ({ context, event }) => {
       address: event.log.address,
       minFee: BigInt(0),
       creationWindowContract: zeroAddress,
-      circuitBreakerContract: zeroAddress,
-      optionStorageContract: zeroAddress,
-      platformFee: BigInt(0),
-      sfdContract: zeroAddress,
-      sf: args.sf,
-      traderNFTContract: zeroAddress,
-      stepSize: BigInt(0),
+      maxFee: BigInt(0),
+      maxPeriod: args.value,
+      minPeriod: 0,
     },
-    update: ({ current }) => ({
-      sf: args.sf,
-    }),
+    update: { maxPeriod: args.value },
   });
 });
-ponder.on(
-  "OptionsConfig:UpdatetraderNFTContract",
-  async ({ context, event }) => {
-    const { args } = event;
 
-    await context.db.ConfigContract.upsert({
-      id: event.log.address,
-      create: {
-        address: event.log.address,
-        minFee: BigInt(0),
-        creationWindowContract: zeroAddress,
-        circuitBreakerContract: zeroAddress,
-        optionStorageContract: zeroAddress,
-        platformFee: BigInt(0),
-        sfdContract: zeroAddress,
-        sf: BigInt(0),
-        traderNFTContract: args.value,
-        stepSize: BigInt(0),
-      },
-      update: ({ current }) => ({
-        traderNFTContract: args.value,
-      }),
-    });
-  }
-);
-ponder.on("OptionsConfig:UpdateStrikeStepSize", async ({ context, event }) => {
+ponder.on("OptionsConfig:UpdateMinPeriod", async ({ context, event }) => {
   const { args } = event;
 
   await context.db.ConfigContract.upsert({
@@ -201,16 +81,10 @@ ponder.on("OptionsConfig:UpdateStrikeStepSize", async ({ context, event }) => {
       address: event.log.address,
       minFee: BigInt(0),
       creationWindowContract: zeroAddress,
-      circuitBreakerContract: zeroAddress,
-      optionStorageContract: zeroAddress,
-      platformFee: BigInt(0),
-      sfdContract: zeroAddress,
-      sf: BigInt(0),
-      traderNFTContract: zeroAddress,
-      stepSize: args.strikeStepSize,
+      maxFee: BigInt(0),
+      maxPeriod: 0,
+      minPeriod: args.value,
     },
-    update: ({ current }) => ({
-      stepSize: args.strikeStepSize,
-    }),
+    update: { minPeriod: args.value },
   });
 });

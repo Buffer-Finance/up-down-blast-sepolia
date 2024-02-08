@@ -3,6 +3,7 @@ import { http } from "viem";
 import { BufferBinaryOptions } from "./abis/BufferBinaryOption";
 import { BufferRouter } from "./abis/BufferRouter";
 import { Config } from "./abis/Config";
+import { TournamentManager } from "./abis/TournamentManager";
 export default createConfig({
   networks: {
     blastSepolia: {
@@ -17,12 +18,21 @@ export default createConfig({
       startBlock: 1004456,
       maxBlockRange: 10000,
       filter: {
+        event: ["CreateContract", "Create", "Expire", "Exercise"],
+      },
+    },
+    TournamentManager: {
+      network: "blastSepolia",
+      abi: TournamentManager,
+      startBlock: 1004456,
+      maxBlockRange: 10000,
+      filter: {
         event: [
-          "CreateOptionsContract",
-          "Create",
-          "Expire",
-          "Exercise",
-          "Pause",
+          "CreateTournament",
+          "VerifyTournament",
+          "StartTournament",
+          "EndTournament",
+          "CloseTournament",
         ],
       },
     },
@@ -33,15 +43,11 @@ export default createConfig({
       maxBlockRange: 10000,
       filter: {
         event: [
+          "UpdateMinPeriod",
+          "UpdateMaxPeriod",
+          "UpdateMaxFee",
           "UpdateMinFee",
           "UpdateCreationWindowContract",
-          "UpdateCircuitBreakerContract",
-          "UpdateOptionStorageContract",
-          "UpdatePlatformFee",
-          "UpdateSettlementFeeDisbursalContract",
-          "UpdateSf",
-          "UpdatetraderNFTContract",
-          "UpdateStrikeStepSize",
         ],
       },
     },

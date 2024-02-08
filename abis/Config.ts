@@ -1,88 +1,21 @@
 export const Config = [
   {
-    inputs: [
-      {
-        internalType: "contract BufferBinaryPool",
-        name: "_pool",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "previousAdminRole",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "newAdminRole",
-        type: "bytes32",
-      },
-    ],
-    name: "RoleAdminChanged",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
         internalType: "address",
-        name: "account",
+        name: "previousOwner",
         type: "address",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "sender",
+        name: "newOwner",
         type: "address",
       },
     ],
-    name: "RoleGranted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleRevoked",
+    name: "OwnershipTransferred",
     type: "event",
   },
   {
@@ -90,12 +23,12 @@ export const Config = [
     inputs: [
       {
         indexed: false,
-        internalType: "address",
-        name: "_circuitBreakerContract",
-        type: "address",
+        internalType: "uint16",
+        name: "value",
+        type: "uint16",
       },
     ],
-    name: "UpdateCircuitBreakerContract",
+    name: "UpdateAssetUtilizationLimit",
     type: "event",
   },
   {
@@ -109,6 +42,38 @@ export const Config = [
       },
     ],
     name: "UpdateCreationWindowContract",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: "UpdateMarketTime",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "UpdateMaxFee",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint32",
+        name: "value",
+        type: "uint32",
+      },
+    ],
+    name: "UpdateMaxPeriod",
     type: "event",
   },
   {
@@ -129,25 +94,12 @@ export const Config = [
     inputs: [
       {
         indexed: false,
-        internalType: "address",
+        internalType: "uint32",
         name: "value",
-        type: "address",
+        type: "uint32",
       },
     ],
-    name: "UpdateOptionStorageContract",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_platformFee",
-        type: "uint256",
-      },
-    ],
-    name: "UpdatePlatformFee",
+    name: "UpdateMinPeriod",
     type: "event",
   },
   {
@@ -168,32 +120,6 @@ export const Config = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint256",
-        name: "sf",
-        type: "uint256",
-      },
-    ],
-    name: "UpdateSf",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint128",
-        name: "strikeStepSize",
-        type: "uint128",
-      },
-    ],
-    name: "UpdateStrikeStepSize",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
         internalType: "address",
         name: "value",
         type: "address",
@@ -204,77 +130,22 @@ export const Config = [
   },
   {
     inputs: [],
-    name: "CONTRACT_UPDATOR",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "DEFAULT_ADMIN_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "FEE_UPDATOR",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "IV_UPDATOR",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "PERIOD_UPDATOR",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "circuitBreakerContract",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "creationWindowContract",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "bytes32", name: "role", type: "bytes32" }],
-    name: "getRoleAdmin",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    inputs: [],
+    name: "maxFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "grantRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "hasRole",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    inputs: [],
+    name: "maxPeriod",
+    outputs: [{ internalType: "uint32", name: "", type: "uint32" }],
     stateMutability: "view",
     type: "function",
   },
@@ -287,60 +158,21 @@ export const Config = [
   },
   {
     inputs: [],
-    name: "optionStorageContract",
+    name: "minPeriod",
+    outputs: [{ internalType: "uint32", name: "", type: "uint32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "platformFee",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pool",
-    outputs: [
-      {
-        internalType: "contract BufferBinaryPool",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "renounceRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "revokeRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_circuitBreakerContract",
-        type: "address",
-      },
-    ],
-    name: "setCircuitBreakerContract",
+    name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -359,6 +191,20 @@ export const Config = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "uint256", name: "_maxFee", type: "uint256" }],
+    name: "setMaxFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint32", name: "_maxPeriod", type: "uint32" }],
+    name: "setMaxPeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "_minFee", type: "uint256" }],
     name: "setMinFee",
     outputs: [],
@@ -366,23 +212,8 @@ export const Config = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_optionStorageContract",
-        type: "address",
-      },
-    ],
-    name: "setOptionStorageContract",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "_platformFee", type: "uint256" },
-    ],
-    name: "setPlatformFee",
+    inputs: [{ internalType: "uint32", name: "_minPeriod", type: "uint32" }],
+    name: "setMinPeriod",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -391,11 +222,11 @@ export const Config = [
     inputs: [
       {
         internalType: "address",
-        name: "_settlementFeeDisbursalContract",
+        name: "_traderNFTContract",
         type: "address",
       },
     ],
-    name: "setSettlementFeeDisbursalContract",
+    name: "setTraderNFTContract",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -408,10 +239,17 @@ export const Config = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
-    name: "supportsInterface",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    inputs: [],
+    name: "traderNFTContract",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ] as const;

@@ -4,6 +4,7 @@ export default createSchema((p) => ({
   OptionContract: p.createTable({
     id: p.string(),
     address: p.string(),
+    isPaused: p.boolean(),
     asset: p.string(),
     payoutForUp: p.bigint(),
     payoutForDown: p.bigint(),

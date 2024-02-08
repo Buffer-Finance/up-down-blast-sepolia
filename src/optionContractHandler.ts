@@ -20,6 +20,7 @@ ponder.on("BufferBinaryOptions:CreateContract", async ({ context, event }) => {
     await context.db.OptionContract.create({
       id: getAddress(event.log.address),
       data: {
+        isPaused: false,
         configId: configContractAddress,
         address: getAddress(event.log.address),
         asset: assetPair,
@@ -132,14 +133,14 @@ ponder.on("BufferBinaryOptions:Exercise", async ({ context, event }) => {
   }
 });
 
-// ponder.on("BufferBinaryOptions:Pause", async ({ context, event }) => {
-//   const { args } = event;
-//   const { isPaused } = args;
+ponder.on("BufferBinaryOptions:Pause", async ({ context, event }) => {
+  const { args } = event;
+  const { isPaused } = args;
 
-//   await context.db.OptionContract.update({
-//     id: getAddress(event.log.address),
-//     data: {
-//       isPaused,
-//     },
-//   });
-// });
+  await context.db.OptionContract.update({
+    id: getAddress(event.log.address),
+    data: {
+      isPaused,
+    },
+  });
+});

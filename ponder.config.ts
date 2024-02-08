@@ -18,7 +18,7 @@ export default createConfig({
       startBlock: 1343567,
       maxBlockRange: 10000,
       filter: {
-        event: ["CreateContract", "Create", "Expire", "Exercise"],
+        event: ["CreateContract", "Create", "Expire", "Exercise", "Pause"],
       },
     },
     TournamentManager: {

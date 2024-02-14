@@ -4,6 +4,7 @@ import { BufferBinaryOptions } from "./abis/BufferBinaryOption";
 import { BufferRouter } from "./abis/BufferRouter";
 import { Config } from "./abis/Config";
 import { TournamentManager } from "./abis/TournamentManager";
+
 export default createConfig({
   networks: {
     blastSepolia: {

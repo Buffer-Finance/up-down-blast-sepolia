@@ -1,16 +1,27 @@
 import { createSchema } from "@ponder/core";
 
+export type configContract = {
+  id: string;
+  address: string;
+  maxSkew: bigint;
+  iv: bigint;
+  platformFee: bigint;
+  payout: bigint;
+  sf: bigint;
+  stepSize: bigint;
+};
+
 export default createSchema((p) => ({
   OptionContract: p.createTable({
     id: p.string(),
     address: p.string(),
+    category: p.int(),
     token0: p.string(),
     token1: p.string(),
     isPaused: p.boolean(),
     poolContract: p.bytes(),
     routerContract: p.bytes(),
     pool: p.string(),
-    asset: p.string(),
     openUp: p.bigint(),
     openDown: p.bigint(),
     openInterestUp: p.bigint(),
@@ -21,14 +32,16 @@ export default createSchema((p) => ({
   ConfigContract: p.createTable({
     id: p.string(),
     address: p.string(),
-    minFee: p.bigint(),
-    creationWindowContract: p.bytes(),
-    circuitBreakerContract: p.bytes(),
-    optionStorageContract: p.bytes(),
+    maxSkew: p.bigint(),
+    // creationWindowContract: p.bytes(),
+    // circuitBreakerContract: p.bytes(),
+    iv: p.int(),
+    // optionStorageContract: p.bytes(),
     platformFee: p.bigint(),
-    sfdContract: p.bytes(),
+    payout: p.bigint(),
+    // sfdContract: p.bytes(),
     sf: p.bigint(),
-    traderNFTContract: p.bytes(),
+    // traderNFTContract: p.bytes(),
     stepSize: p.bigint(),
   }),
   QueuedOptionData: p.createTable({
@@ -40,12 +53,15 @@ export default createSchema((p) => ({
     state: p.int(),
     isAbove: p.boolean(),
     queueID: p.bigint(),
+    depositToken: p.string(),
     reason: p.string().optional(),
     queueTimestamp: p.bigint(),
     cancelTimestamp: p.bigint(),
     lag: p.bigint(),
+    maxFeePerContract: p.bigint(),
     processTime: p.bigint(),
     expirationTime: p.bigint(),
+    numberOfContracts: p.bigint(),
     totalFee: p.bigint(),
   }),
   UserOptionData: p.createTable({
@@ -79,5 +95,21 @@ export default createSchema((p) => ({
     optionContractId: p.string().references("OptionContract.id"),
     optionContract: p.one("optionContractId"),
     settlementFee: p.bigint(),
+  }),
+  Market: p.createTable({
+    id: p.string(),
+    skew: p.bigint(),
+    strike: p.bigint(),
+    expiration: p.bigint(),
+    optionContractId: p.string().references("OptionContract.id"),
+    optionContract: p.one("optionContractId"),
+    marketId: p.string(),
+  }),
+  BurnedBFR: p.createTable({
+    id: p.string(),
+    timestamp: p.bigint(),
+    period: p.string(),
+    amount: p.bigint(),
+    cumulativeAmount: p.bigint(),
   }),
 }));
